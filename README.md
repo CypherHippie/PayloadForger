@@ -4,11 +4,13 @@ PayloadForger is a tool designed to generate custom payloads for web application
 
 ## Features
 
-Generate payloads for XSS, SQL Injection, Command Injection, and Path Traversal.
+Support for Multiple Attack Types: Easily generate payloads for different types of attacks.
 
-Encode payloads in hexadecimal and Base64.
+Output Formats: Payloads can be saved in plain text, Hex, and Base64 formats.
 
-Support for custom payloads with path traversal for more advanced testing.
+Colorized Output: Enhanced visual representation in terminal output.
+
+File Handling: Payloads are saved to a file for easy review and further analysis.
 
 ## Directory Structure
 
@@ -24,9 +26,10 @@ project-root/
 │   ├── xss.txt
 │   ├── sqlinjection.txt
 │   ├── commandinjection.txt
-│   └── custom.txt
+│   └── pathtransversal.txt
 ├── Cargo.toml
 └── target/
+*Archives folder and .txt file will be created once the tool compiles.
 
 ## Requirements
 
@@ -46,7 +49,7 @@ cd payload-forge
 
 
 
-cargo build --reléase
+cargo build --release
 
 ## Run the application:
 
@@ -58,8 +61,6 @@ cargo run --release <payload_type> <attack_type> <number_of_payloads>
 <payload_type>: raw
 
 <attack_type>: xss, sqlinjection, commandinjection, pathtraversal
-
-[custom_payload] (optional): Custom payload path for path traversal
 
 <number_of_payloads>: The number of payloads you want to generate.
 
@@ -94,6 +95,11 @@ cargo run -- raw pathtraversal {number}
 Raw: %3Ciframe src='javascript:alert("&lt;SCRIPT a=\"&gt;'&gt;\" SRC=\"http&#58;//ha&#46;ckers&#46;org/xss&#46;js\"&gt;&lt;/SCRIPT&gt;")'%3E%3C/iframe%3E
 Hex: <encoded_hex_value>
 Base64: <encoded_base64_value>
+DoubleURL: <doubleurl_version_>
+Case varied: <case_varied_version>
+Comment Injected: <comment_injection_version>
+Concatenated: <concatenated_version>
+Unicode: <unicode_version_>
 
 ### Viewing Generated Payloads
 

@@ -3,15 +3,20 @@ mod payload;
 
 use std::env;
 use std::process;
+use std::io::Write;  // Add this line to import the Write trait
+use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 
 fn print_header() {
-    println!();
-    println!("===============================");
-    println!("      CertusHack PayloadForger      ");
-    println!("===============================");
-    println!();
-    println!("Developed by CertusHack");
-    println!("---------------------------------");
+    let mut stdout = StandardStream::stdout(ColorChoice::Always);
+    
+    stdout.set_color(ColorSpec::new().set_fg(Some(Color::Cyan))).unwrap();
+    writeln!(&mut stdout, "\n===============================").unwrap();
+    writeln!(&mut stdout, "      CertusHack PayloadForger      ").unwrap();
+    writeln!(&mut stdout, "===============================\n").unwrap();
+    stdout.reset().unwrap();
+    
+    writeln!(&mut stdout, "Developed by CertusHack").unwrap();
+    writeln!(&mut stdout, "---------------------------------\n").unwrap();
 }
 
 fn main() {
@@ -42,7 +47,11 @@ fn main() {
         if let Some(attack_type) = attack_types::AttackType::from_str(attack_type_str) {
             let payloads = payload::generate_payloads(&attack_type, count);
             payload::save_payloads(&payloads);
-            println!("Generated {} payloads and saved to archives/generated_payloads.txt", count);
+            
+            let mut stdout = StandardStream::stdout(ColorChoice::Always);
+            stdout.set_color(ColorSpec::new().set_fg(Some(Color::Green))).unwrap();
+            writeln!(&mut stdout, "\nGenerated {} payloads and saved to archives/generated_payloads.txt", count).unwrap();
+            stdout.reset().unwrap();
         } else {
             eprintln!("Invalid attack type specified.");
             process::exit(1);

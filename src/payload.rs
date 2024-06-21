@@ -1,9 +1,10 @@
-use std::fs::{File};
+use std::fs::File;
 use std::io::{BufWriter, Write, BufRead};
 use std::path::Path;
-use crate::attack_types::AttackType;
+use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
+use std::io::BufReader; 
 
-pub fn generate_payloads(attack_type: &AttackType, count: usize) -> Vec<String> {
+pub fn generate_payloads(attack_type: &crate::attack_types::AttackType, count: usize) -> Vec<String> {
     let mut payloads = Vec::new();
     for payload in attack_type.generate(count, false) {
         payloads.push(payload);
@@ -16,17 +17,27 @@ pub fn save_payloads(payloads: &[String]) {
     let file = File::create(file_path).expect("Unable to create file");
     let mut writer = BufWriter::new(file);
 
-    writeln!(writer, "===============================").expect("Unable to write to file");
-    writeln!(writer, "          Generated Payloads          ").expect("Unable to write to file");
-    writeln!(writer, "===============================").expect("Unable to write to file");
-    writeln!(writer, "").expect("Unable to write to file");
+    let mut stdout = StandardStream::stdout(ColorChoice::Always);
+    stdout.set_color(ColorSpec::new().set_fg(Some(Color::Yellow))).unwrap();
+    writeln!(&mut stdout, "\n===============================").unwrap();
+    writeln!(&mut stdout, "          Generated Payloads          ").unwrap();
+    writeln!(&mut stdout, "===============================\n").unwrap();
+    stdout.reset().unwrap();
 
     for (i, payload) in payloads.iter().enumerate() {
-        writeln!(writer, "Payload {}: {}", i + 1, payload).expect("Unable to write to file");
+        writeln!(&mut writer, "---------------------------------").expect("Unable to write to file");
+        writeln!(&mut writer, "Payload #{}: ", i + 1).expect("Unable to write to file");
+        writeln!(&mut writer, "---------------------------------").expect("Unable to write to file");
+        writeln!(&mut writer, "{}", payload).expect("Unable to write to file");
+        writeln!(&mut writer, "").expect("Unable to write to file");
     }
 
-    writeln!(writer, "").expect("Unable to write to file");
-    writeln!(writer, "End of Payloads").expect("Unable to write to file");
+    let mut stdout = StandardStream::stdout(ColorChoice::Always);
+    stdout.set_color(ColorSpec::new().set_fg(Some(Color::Yellow))).unwrap();
+    writeln!(&mut stdout, "Payloads Generated\n").unwrap();
+    stdout.reset().unwrap();
+
+    writeln!(&mut writer, "").expect("Unable to write to file");
 }
 
 // Helper function to read lines from a file
@@ -35,5 +46,5 @@ where
     P: AsRef<Path>,
 {
     let file = File::open(filename)?;
-    Ok(std::io::BufReader::new(file).lines())
+    Ok(BufReader::new(file).lines()) // Use BufReader::new
 }
